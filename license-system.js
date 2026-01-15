@@ -203,3 +203,10 @@ function showLicenseGate() {
     }
   });
 }
+
+// Initialize and export license manager globally
+const licenseManager = new LicenseManager();
+window.licenseManager = licenseManager;
+
+// Export showLicenseGate function
+window.showLicenseGate = showLicenseGate;
