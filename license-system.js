@@ -155,9 +155,12 @@ function showLicenseGate() {
           id="activate-btn" 
           style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold;"
         >Activate License</button>
+        div>
+    </div>
   `;
   
-  
+  document.body.appendChild(modal);
+
   const input = document.getElementById('license-key-input');
   const btn = document.getElementById('activate-btn');
   const errorDiv = document.getElementById('license-error');
