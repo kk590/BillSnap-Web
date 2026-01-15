@@ -157,6 +157,34 @@ class LicenseManager {
         </div>
       </div>
     `;
+
+      showLicenseGate() {
+    // Mandatory license gate - no skip option
+    const modalHTML = `
+      <div id="licenseGateModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif;">
+        <div style="background: white; padding: 48px; border-radius: 16px; max-width: 500px; width: 90%; box-shadow: 0 25px 80px rgba(0,0,0,0.5); text-align: center;">
+          <div style="font-size: 64px; margin-bottom: 16px;">🔒</div>
+          <h2 style="margin: 0 0 16px 0; color: #1e40af; font-size: 32px; font-weight: 700;">BillSnap</h2>
+          <p style="color: #6b7280; margin: 16px 0 32px 0; font-size: 16px;">Enter your license key to access the application</p>
+          <input type="text" id="licenseGateInput" placeholder="BILLSNAP-XXXX-XXXX-XXXX-XXXX" 
+            style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; font-family: monospace; text-transform: uppercase; margin-bottom: 12px; box-sizing: border-box; text-align: center; font-weight: 600;" 
+            maxlength="29" autofocus>
+          <div id="licenseGateError" style="color: #dc2626; font-size: 14px; margin: 12px 0; min-height: 24px; font-weight: 600;"></div>
+          <button onclick="window.validateAndActivateLicense()" 
+            style="width: 100%; padding: 16px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 16px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transition: all 0.2s;" 
+            onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(37, 99, 235, 0.4)';" 
+            onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(37, 99, 235, 0.3)';">
+            🚀 Activate License
+          </button>
+          <p style="color: #9ca3af; font-size: 12px; margin: 24px 0 0 0;">
+            Need a license key? Contact <strong>support@billsnap.app</strong>
+          </p>
+        </div>
+      </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+  }
     
     document.body.insertAdjacentHTML('beforeend', modalHTML);
   }
@@ -183,6 +211,35 @@ window.activateLicense = function() {
     location.reload();
   } else {
     error.textContent = result.message;
+  }
+};
+
+// Gate-specific activation function
+window.validateAndActivateLicense = function() {
+  const input = document.getElementById('licenseGateInput');
+  const error = document.getElementById('licenseGateError');
+  const key = input.value.trim().toUpperCase();
+  
+  if (!key) {
+    error.textContent = '⚠️ Please enter a license key';
+    return;
+  }
+  
+  const result = window.licenseManager.activateLicense(key);
+  if (result.success) {
+    // Remove the gate modal
+    const modal = document.getElementById('licenseGateModal');
+    if (modal) modal.remove();
+    // Show the app
+    document.getElementById('app').style.display = 'block';
+    // Success message
+    alert('✅ License activated successfully! Welcome to BillSnap.');
+  } else {
+    error.textContent = '❌ Invalid license key. Please check and try again.';
+    input.style.borderColor = '#dc2626';
+    setTimeout(() => {
+      input.style.borderColor = '#e5e7eb';
+    }, 2000);
   }
 };
 
