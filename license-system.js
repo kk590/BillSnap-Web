@@ -155,10 +155,7 @@ function showLicenseGate() {
           id="activate-btn" 
           style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold;"
         >Activate License</button>
-        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
-          <p style="color: #999; font-size: 14px; margin: 0;">Don't have a license? <a href="https://billsnap.lemonsqueezy.com" target="_blank" style="color: #4CAF50;">Purchase one here</a></p>
-        </div>
-      </div>
+        div>
     </div>
   `;
   
