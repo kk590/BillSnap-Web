@@ -1,8 +1,8 @@
 class LicenseManager {
   constructor() {
     this.storageKey = 'billsnap_license';
-    this.LEMON_SQUEEZY_STORE_ID = 'YOUR_STORE_ID'; // Replace with your store ID
-    this.LEMON_SQUEEZY_PRODUCT_ID = 'YOUR_PRODUCT_ID'; // Replace with your product ID
+    this.LEMON_SQUEEZY_STORE_ID = '273843'; // Replace with your store ID
+    this.LEMON_SQUEEZY_PRODUCT_ID = '775045'; // Replace with your product ID
     this.licenseData = null;
     this.init();
   }
