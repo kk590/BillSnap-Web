@@ -249,6 +249,86 @@
             document.getElementById('gstPercent').addEventListener('input', calculate);
         });
 
+                // Simple Lemon Squeezy License Gate
+        (function() {
+            const STORE_ID = '273843';
+            const PRODUCT_ID = '775045';
+            const LICENSE_KEY = 'billsnap_license';
+            
+            // Check if licensed
+            const stored = localStorage.getItem(LICENSE_KEY);
+            if (stored && JSON.parse(stored).licensed) {
+                return; // Already licensed
+            }
+            
+            // Hide app and show license gate
+            document.getElementById('app').style.display = 'none';
+            
+            // Create license modal
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999">
+                    <div style="background:white;padding:40px;border-radius:12px;max-width:450px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,0.3)">
+                        <h2 style="margin:0 0 10px 0;color:#333;font-size:24px">🔐 License Required</h2>
+                        <p style="color:#666;margin-bottom:25px">Enter your Lemon Squeezy license key to unlock BillSnap</p>
+                        <input id="licenseInput" type="text" placeholder="Enter license key" style="width:100%;padding:12px;border:2px solid #ddd;border-radius:6px;font-size:15px;margin-bottom:10px;box-sizing:border-box">
+                        <div id="licenseError" style="color:#dc3545;margin-bottom:15px;display:none;font-size:14px"></div>
+                        <button id="activateBtn" style="width:100%;padding:14px;background:#4CAF50;color:white;border:none;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer">Activate License</button>
+                        <p style="margin-top:20px;font-size:13px;color:#999;text-align:center">Don't have a license? <a href="https://app.lemonsqueezy.com/checkout/buy/5c3a85ae-a370-4054-bdfd-b29018cb28e5" target="_blank" style="color:#4CAF50">Purchase here</a></p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Handle activation
+            document.getElementById('activateBtn').onclick = async function() {
+                const key = document.getElementById('licenseInput').value.trim();
+                const errorDiv = document.getElementById('licenseError');
+                const btn = this;
+                
+                if (!key) {
+                    errorDiv.textContent = 'Please enter a license key';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                
+                btn.textContent = 'Validating...';
+                btn.disabled = true;
+                errorDiv.style.display = 'none';
+                
+                try {
+                    const response = await fetch('https://api.lemonsqueezy.com/v1/licenses/validate', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({license_key: key, instance_name: 'billsnap-web'})
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.valid) {
+                        localStorage.setItem(LICENSE_KEY, JSON.stringify({licensed: true, key: key, date: new Date().toISOString()}));
+                        modal.remove();
+                        document.getElementById('app').style.display = 'block';
+                    } else {
+                        errorDiv.textContent = 'Invalid license key. Please try again.';
+                        errorDiv.style.display = 'block';
+                        btn.textContent = 'Activate License';
+                        btn.disabled = false;
+                    }
+                } catch (error) {
+                    errorDiv.textContent = 'Validation failed. Check your connection.';
+                    errorDiv.style.display = 'block';
+                    btn.textContent = 'Activate License';
+                    btn.disabled = false;
+                }
+            };
+            
+            // Enter key support
+            document.getElementById('licenseInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') document.getElementById('activateBtn').click();
+            });
+        })();
+
     </script>
 </body>
 </html>
