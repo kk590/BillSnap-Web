@@ -261,7 +261,7 @@
                 return; // Already licensed
             }
             
-            // Hide app and show license gate
+            // Hide app and show license gate {
             document.getElementById('app').style.display = 'none';
             
             // Create license modal
@@ -306,7 +306,7 @@
                     const data = await response.json();
                     
                     if (response.ok && data.valid) {
-                        localStorage.setItem(LICENSE_KEY, JSON.stringify({licensed: true, key: key, date: new Date().toISOString()}));
+                        localStorage.setItem(LICENSE_KEY, JSON.stringify({type: 'licensed', key: key, date: new Date().toISOString()}));
                         modal.remove();
                         document.getElementById('app').style.display = 'block';
                     } else {
