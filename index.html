@@ -257,7 +257,7 @@
             
             // Check if licensed
             const stored = localStorage.getItem(LICENSE_KEY);
-            if (stored && JSON.parse(stored).licensed) {
+            if (stored && JSON.parse(stored).type === 'licensed')
                 return; // Already licensed
             }
             
