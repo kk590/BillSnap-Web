@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BillSnap - Invoice Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+        <script src="license-system.js"></script>
 
             <script src="license-system.js"></script>
 </head>
@@ -247,6 +248,16 @@
         window.addEventListener('load', () => {
             addItem();
             document.getElementById('gstPercent').addEventListener('input', calculate);
+
+                    // License Gate
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.licenseManager && !window.licenseManager.isLicensed()) {
+                document.getElementById('app').style.display = 'none';
+                if (window.showLicenseGate) window.showLicenseGate();
+            } else if (window.licenseManager) {
+                document.getElementById('app').style.display = 'block';
+            }
+        });
         });
 
           pt>
